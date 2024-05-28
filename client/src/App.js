@@ -12,7 +12,7 @@ function App() {
     <div className="App">
       work
       {tg.initDataUnsafe.first_name}
-      {tg.initDataUnsafe.last_name}
+      {tg.initDataUnsafe?.user?.username}
       {tg.initDataUnsafe.user.id}
     </div>
   );
