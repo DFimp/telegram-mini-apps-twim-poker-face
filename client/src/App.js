@@ -11,7 +11,7 @@ function App() {
   return (
     <div className="App">
       work
-      {tg.initDataUnsafe.first_name}
+      {tg.initDataUnsafe?.user?.first_name}
       {tg.initDataUnsafe?.user?.username}
       {tg.initDataUnsafe.user.id}
     </div>
