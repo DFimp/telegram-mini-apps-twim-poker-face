@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Игровая зона 1</title>
+</head>
+<body>
+    {% block content %}
+    <div style="width: 50%; float: left; border: 1px solid black; height: 300px;">
+        <h2>Игрок 1</h2>
+        {{ deck }}
+    </div>
+    <div style="width: 50%; float: left; border: 1px solid black; height: 300px;">
+        <h2>Игрок 2</h2>
+    </div>
+    {% endblock %}
+</body>
+</html>

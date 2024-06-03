@@ -1,12 +1,19 @@
-from sqlalchemy import Column, Integer, String
-from sqlalchemy.orm import declarative_base
+import datetime
+
+from sqlalchemy import text
+from sqlalchemy.orm import declarative_base, Mapped, mapped_column
 
 Base = declarative_base()
 
 
-class User(Base):
+class Users(Base):
     __tablename__ = "users"
-    id = Column(Integer, primary_key=True)
-    first_name = Column(String, nullable=False)
-    username = Column(String, nullable=False)
-    telegram_id = Column(Integer, nullable=False)
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    first_name: Mapped[str] = mapped_column(nullable=False)
+    last_name: Mapped[str] = mapped_column(nullable=True)
+    username: Mapped[str] = mapped_column(nullable=False)
+    telegram_id: Mapped[str] = mapped_column(nullable=False)
+    created_at: Mapped[datetime.datetime] = mapped_column(
+        server_default=text("TIMEZONE('utc', now())")
+    )
