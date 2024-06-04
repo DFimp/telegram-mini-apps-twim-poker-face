@@ -1,4 +1,5 @@
 from sqlalchemy.orm import declarative_base, Mapped, mapped_column, relationship
+from server.src.game.models.UserAction import UserActions
 
 Base = declarative_base()
 

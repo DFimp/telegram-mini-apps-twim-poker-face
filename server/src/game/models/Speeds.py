@@ -1,5 +1,7 @@
 from sqlalchemy.orm import declarative_base, Mapped, mapped_column, relationship
 
+from server.src.game.models.Tables import Tables
+
 Base = declarative_base()
 
 

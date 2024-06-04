@@ -2,7 +2,6 @@ from sqlalchemy import ForeignKey
 from sqlalchemy.orm import declarative_base, Mapped, mapped_column, relationship
 
 from .Stages import Stages
-from .StagesHandings import StagesHandings
 from .Tables import Tables
 from ...users.models import Users
 

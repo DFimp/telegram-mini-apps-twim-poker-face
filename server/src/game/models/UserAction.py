@@ -1,8 +1,5 @@
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import declarative_base, Mapped, mapped_column, relationship
-from .Handings import Handings
-from .Cards import Cards
-from .TableUsers import TableUsers
 from .TypeOfActions import TypeOfActions
 from .StagesHandings import StagesHandings
 

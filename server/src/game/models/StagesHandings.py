@@ -1,7 +1,6 @@
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import declarative_base, Mapped, mapped_column, relationship
-from .Stages import Stages
-from .Handings import Handings
+
 
 Base = declarative_base()
 
