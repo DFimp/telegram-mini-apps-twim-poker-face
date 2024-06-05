@@ -1,23 +1,18 @@
 from sqlalchemy import ForeignKey
-from sqlalchemy.orm import declarative_base, Mapped, mapped_column, relationship
-
-from .Stages import Stages
-from .Tables import Tables
-from ...users.models import Users
-
-Base = declarative_base()
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from server.src.database import Base
 
 
 class Handings(Base):
-    __tablename__ = "Handings"
+    __tablename__ = "handings"
 
     id: Mapped[int] = mapped_column(primary_key=True)
     winner_user_id: Mapped[int] = mapped_column(
-        ForeignKey(Users.id, ondelete="CASCADE")
+        ForeignKey("users.id", ondelete="CASCADE")
     )
-    table_id: Mapped[int] = mapped_column(ForeignKey(Tables.id, ondelete="CASCADE"))
+    table_id: Mapped[int] = mapped_column(ForeignKey("tables.id", ondelete="CASCADE"))
 
-    winner_user: Mapped["Users"] = relationship(back_populates="handings")
-    table: Mapped["Tables"] = relationship(back_populates="handings")
+    winner_user = relationship("Users", back_populates="handing")
+    table = relationship("Tables", back_populates="handing")
+    stage = relationship("Stages", back_populates="handing", secondary="stages_handings")
 
-    stages: Mapped[list["Stages"]] = relationship(back_populates="handings", secondary="stages_handings")

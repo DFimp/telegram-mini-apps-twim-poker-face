@@ -1,12 +1,8 @@
 import datetime
 
 from sqlalchemy import text
-from sqlalchemy.orm import declarative_base, Mapped, mapped_column, relationship
-
-from server.src.game.models.Handings import Handings
-from server.src.game.models.Tables import Tables
-
-Base = declarative_base()
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from server.src.database import Base
 
 
 class Users(Base):
@@ -21,7 +17,9 @@ class Users(Base):
         server_default=text("TIMEZONE('utc', now())")
     )
 
-    tables_with_user: Mapped[list["Tables"]] = relationship(
-        back_populates="users_on_table", secondary="table_users"
+    tables_with_user = relationship(
+        "Tables", back_populates="users_on_table", secondary="table_users"
     )
-    handings: Mapped[list["Handings"]] = relationship(back_populates="winner_user")
+    handings = relationship("Handings", back_populates="winner_user")
+
+    action_user = relationship("UserActions", back_populates="user")

@@ -1,8 +1,5 @@
 from sqlalchemy.orm import declarative_base, Mapped, mapped_column, relationship
-
-from server.src.game.models.Handings import Handings
-
-Base = declarative_base()
+from server.src.database import Base
 
 
 class Stages(Base):
@@ -11,6 +8,6 @@ class Stages(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     title: Mapped[str] = mapped_column(nullable=False)
 
-    handings: Mapped[list["Handings"]] = relationship(
-        "Handing", secondary="stages_handings", back_populates="stages"
+    handing = relationship(
+        "Handings", secondary="stages_handings", back_populates="stage"
     )

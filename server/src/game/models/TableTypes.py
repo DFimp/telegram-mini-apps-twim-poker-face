@@ -1,6 +1,5 @@
-from sqlalchemy.orm import declarative_base, Mapped, mapped_column
-
-Base = declarative_base()
+from sqlalchemy.orm import declarative_base, Mapped, mapped_column, relationship
+from server.src.database import Base
 
 
 class TableTypes(Base):
@@ -10,3 +9,5 @@ class TableTypes(Base):
     buy_in_low: Mapped[int] = mapped_column(nullable=False)
     buy_in_high: Mapped[int] = mapped_column(nullable=False)
     blind: Mapped[bool]
+
+    table = relationship("Tables", back_populates="table")
