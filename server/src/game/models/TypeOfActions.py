@@ -6,6 +6,6 @@ class TypeOfActions(Base):
     __tablename__ = "type_of_actions"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    title: Mapped[str] = mapped_column(nullable=False)
+    title: Mapped[str] = mapped_column(nullable=True)
 
     action_user = relationship("UserActions", back_populates="type")

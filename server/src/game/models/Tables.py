@@ -4,6 +4,9 @@ from sqlalchemy import ForeignKey, text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from server.src.database import Base
 
+from .TableTypes import TableTypes
+from .Speeds import Speeds
+from .Handings import Handings
 
 class Tables(Base):
     __tablename__ = "tables"
@@ -23,4 +26,4 @@ class Tables(Base):
     )
     speed = relationship("Speeds", back_populates="table")
     handing = relationship("Handings", back_populates="table")
-    table_type = relationship("TableTypes", back_populates="table_types")
+    table_type = relationship("TableTypes", back_populates="table")

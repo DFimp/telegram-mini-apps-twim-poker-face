@@ -2,6 +2,8 @@ from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from server.src.database import Base
 
+from .Stages import Stages
+from .UserActions import UserActions
 
 class StagesHandings(Base):
     __tablename__ = "stages_handings"

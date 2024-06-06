@@ -6,6 +6,6 @@ class Speeds(Base):
     __tablename__ = "speeds"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    title: Mapped[str] = mapped_column(nullable=False)
+    title: Mapped[str] = mapped_column(nullable=True)
 
     table = relationship("Tables", back_populates="speed")

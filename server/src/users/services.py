@@ -3,14 +3,14 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from fastapi import HTTPException
 
-from .models import User
+from .models import Users
 from .schemas import UserCreate
 
 
 async def get_user_by_telegram_id(telegram_id: int, session: AsyncSession):
     """Получение пользователя по telegram_id"""
     try:
-        result = await session.execute(select(User).filter_by(telegram_id=telegram_id))
+        result = await session.execute(select(Users).filter_by(telegram_id=telegram_id))
         return result.scalars().first()
     except SQLAlchemyError:
         raise HTTPException(status_code=500, detail=str(SQLAlchemyError))
@@ -20,8 +20,9 @@ async def create_user(user: UserCreate, session: AsyncSession):
     """Создание и добавление пользователя в БД"""
 
     try:
-        new_user = User(
+        new_user = Users(
             first_name=user.first_name,
+            last_name=user.last_name,
             username=user.username,
             telegram_id=user.telegram_id,
         )
@@ -32,6 +33,7 @@ async def create_user(user: UserCreate, session: AsyncSession):
 
         return new_user
     except SQLAlchemyError:
+        await session.rollback()
         raise HTTPException(status_code=500, detail=str(SQLAlchemyError))
     except Exception:
         await session.rollback()

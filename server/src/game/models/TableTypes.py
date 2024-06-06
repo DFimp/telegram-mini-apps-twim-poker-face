@@ -6,8 +6,9 @@ class TableTypes(Base):
     __tablename__ = "table_types"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    buy_in_low: Mapped[int] = mapped_column(nullable=False)
-    buy_in_high: Mapped[int] = mapped_column(nullable=False)
+    buy_in_low: Mapped[int] = mapped_column(nullable=True)
+    buy_in_high: Mapped[int] = mapped_column(nullable=True)
     blind: Mapped[bool]
 
-    table = relationship("Tables", back_populates="table")
+    table = relationship("Tables", back_populates="table_type")
+
