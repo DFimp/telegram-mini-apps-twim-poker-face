@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from server.src.database import Base
 
+
 class Cards(Base):
     __tablename__ = "cards"
 
