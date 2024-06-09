@@ -1,8 +1,8 @@
-"""game models and user model2
+"""user model, game models
 
-Revision ID: 93a4ade28eb1
+Revision ID: 290c87ab48ad
 Revises: 
-Create Date: 2024-06-06 12:54:37.017753
+Create Date: 2024-06-09 14:49:58.536707
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '93a4ade28eb1'
+revision: str = '290c87ab48ad'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -50,12 +50,11 @@ def upgrade() -> None:
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('users',
-    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('telegram_id', sa.Integer(), nullable=False),
     sa.Column('first_name', sa.String(), nullable=False),
     sa.Column('last_name', sa.String(), nullable=True),
     sa.Column('username', sa.String(), nullable=False),
-    sa.Column('telegram_id', sa.Integer(), nullable=False),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('telegram_id')
     )
     op.create_table('tables',
     sa.Column('id', sa.Integer(), nullable=False),
@@ -72,7 +71,7 @@ def upgrade() -> None:
     sa.Column('winner_user_id', sa.Integer(), nullable=False),
     sa.Column('table_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['table_id'], ['tables.id'], ondelete='CASCADE'),
-    sa.ForeignKeyConstraint(['winner_user_id'], ['users.id'], ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['winner_user_id'], ['users.telegram_id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('table_users',
@@ -85,7 +84,7 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['card_first_id'], ['cards.id'], ),
     sa.ForeignKeyConstraint(['card_second_id'], ['cards.id'], ),
     sa.ForeignKeyConstraint(['table_id'], ['tables.id'], ondelete='CASCADE'),
-    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['user_id'], ['users.telegram_id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('stages_handings',

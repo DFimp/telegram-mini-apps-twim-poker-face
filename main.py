@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from server.src.users.routers import router as router_users
 from server.src.pages.router import router as router_pages
 from server.src.game.routers.router_card import router as router_card
-
+from server.src.game.routers.router_table import router as router_table
 
 app = FastAPI(title="Poker")
 
@@ -26,6 +26,7 @@ app.add_middleware(
 app.include_router(router_users)
 app.include_router(router_pages)
 app.include_router(router_card)
+app.include_router(router_table)
 
 
 @app.get("/")

@@ -8,7 +8,8 @@ from .schemas import UserCreate
 
 
 async def get_user_by_telegram_id(telegram_id: int, session: AsyncSession):
-    """Получение пользователя по telegram_id"""
+    """Получение пользователя по id"""
+
     try:
         result = await session.execute(select(Users).filter_by(telegram_id=telegram_id))
         return result.scalars().first()
@@ -21,10 +22,10 @@ async def create_user(user: UserCreate, session: AsyncSession):
 
     try:
         new_user = Users(
+            telegram_id=user.telegram_id,
             first_name=user.first_name,
             last_name=user.last_name,
             username=user.username,
-            telegram_id=user.telegram_id,
         )
 
         session.add(new_user)

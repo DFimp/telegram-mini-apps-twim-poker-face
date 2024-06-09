@@ -8,6 +8,7 @@ from .TableTypes import TableTypes
 from .Speeds import Speeds
 from .Handings import Handings
 
+
 class Tables(Base):
     __tablename__ = "tables"
 

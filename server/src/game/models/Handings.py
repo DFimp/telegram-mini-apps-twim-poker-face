@@ -10,7 +10,7 @@ class Handings(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     winner_user_id: Mapped[int] = mapped_column(
-        ForeignKey("users.id", ondelete="CASCADE")
+        ForeignKey("users.telegram_id", ondelete="CASCADE")
     )
     table_id: Mapped[int] = mapped_column(ForeignKey("tables.id", ondelete="CASCADE"))
 

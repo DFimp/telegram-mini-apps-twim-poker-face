@@ -4,6 +4,7 @@ from server.src.database import Base
 
 from .TypeOfActions import TypeOfActions
 
+
 class UserActions(Base):
     __tablename__ = "user_actions"
 
@@ -18,3 +19,4 @@ class UserActions(Base):
 
     stage_handing = relationship("StagesHandings", back_populates="action_user")
     type = relationship("TypeOfActions", back_populates="action_user")
+

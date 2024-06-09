@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>WebSocket Table</h1>
+    <h2>Your ID: <span id="ws-id"></span></h2>
+    <button id="joinButton" onclick="joinTable()">Присоединиться к столу</button>
+    <button id="leaveButton" onclick="leaveTable()" disabled>Выйти со стола</button>
+    <ul id='messages'></ul>
+    <script>
+        var user_id = 5781834;
+        var table_id = 1;
+        document.querySelector("#ws-id").textContent = user_id;
+        var ws = new WebSocket(`ws://localhost:8000/table/ws/${user_id}/${table_id}`);
+
+        ws.onmessage = function(event) {
+            var messages = document.getElementById('messages');
+            var message = document.createElement('li');
+            var content = document.createTextNode(event.data);
+            message.appendChild(content);
+            messages.appendChild(message);
+
+            var data = JSON.parse(event.data);
+            if (data.action === "status") {
+                if (data.status === "joined") {
+                    document.getElementById('joinButton').disabled = true;
+                    document.getElementById('leaveButton').disabled = false;
+                } else {
+                    document.getElementById('joinButton').disabled = false;
+                    document.getElementById('leaveButton').disabled = true;
+                }
+            }
+        };
+
+        function joinTable() {
+            ws.send(JSON.stringify({ action: "join", user_id: user_id }));
+            document.getElementById('joinButton').disabled = true;
+            document.getElementById('leaveButton').disabled = false;
+        }
+
+        function leaveTable() {
+            ws.send(JSON.stringify({ action: "leave", user_id: user_id }));
+            document.getElementById('joinButton').disabled = false;
+            document.getElementById('leaveButton').disabled = true;
+        }
+    </script>
+</body>
+</html>
+

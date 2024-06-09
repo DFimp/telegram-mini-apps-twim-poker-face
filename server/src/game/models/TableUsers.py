@@ -9,7 +9,7 @@ class TableUsers(Base):
     __tablename__ = "table_users"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.telegram_id", ondelete="CASCADE"))
     table_id: Mapped[int] = mapped_column(ForeignKey("tables.id", ondelete="CASCADE"))
     on_the_table: Mapped[bool]
     card_first_id: Mapped[int] = mapped_column(ForeignKey("cards.id"), nullable=True)

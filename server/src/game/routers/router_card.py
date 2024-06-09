@@ -1,73 +1,53 @@
-import random
-
-from fastapi import APIRouter, Depends
-from sqlalchemy import select
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
-from random import shuffle
-
-from sqlalchemy.orm import selectinload
 
 from server.src.database import get_async_session
-from server.src.game.models.Cards import Cards
-from server.src.game.models.TableUsers import TableUsers
 
-from server.src.game.services.services import get_shuffled_deck
-from server.src.users.models import Users
+from server.src.game.services.services_cards import get_shuffled_deck
+from server.src.game.services.services_table_users import get_users_on_the_table, get_user_on_table_by_id
 
 router = APIRouter(prefix="/card_actions", tags=["Card"])
 
 
-@router.get("/")
+@router.patch("/")
 async def start_handing(
     table_id: int, session: AsyncSession = Depends(get_async_session)
 ):
-    """Раздача для стола table_id"""
+    """Раздача карт пользователям на столе"""
 
-    shuffle_deck = await get_shuffled_deck(session)
+    try:
+        shuffle_deck = await get_shuffled_deck(session)
+        table_users = await get_users_on_the_table(table_id, session)
 
-    # stmt = (select(TableUsers).filter_by(table_id=table_id))
-    stmt = select(TableUsers).filter(TableUsers.table_id == table_id)
-    result = await session.execute(stmt)
-    table_users = result.scalars().all()
+        if len(table_users) < 1:
+            raise HTTPException(
+                status_code=500,
+                detail={"status": "error", "details": "less than two users at a table"},
+            )
 
-    print("TABLE", table_users)
-    print(len(table_users))
-
-    if len(table_users) > 1:
         for user in table_users:
-            first_card = shuffle_deck.pop(0)
-            second_card = shuffle_deck.pop(0)
-
-            user.card_first_id = first_card.id
-            user.card_second_id = second_card.id
-
+            first_card, second_card = shuffle_deck.pop(0), shuffle_deck.pop(0)
+            user.card_first_id, user.card_second_id = first_card.id, second_card.id
         await session.commit()
 
-        print("Карты успешно назначены пользователям.")
-        print(len(table_users))
-    else:
-        print("Нет пользователей для назначения карт.")
+    except SQLAlchemyError:
+        raise HTTPException(status_code=500, detail=str(SQLAlchemyError))
 
-        print("Меньше 2 пользователей")
+    except Exception:
+        raise HTTPException(
+            status_code=500, detail={
+                "status": "error",
+                "details": "unknown error"
+            })
 
 
 @router.get("/get_cards_user/")
-async def start_handing(
-    user_id: int, session: AsyncSession = Depends(get_async_session)
+async def get_cards_user(
+    user_id: int, table_id: int, session: AsyncSession = Depends(get_async_session)
 ):
-    query = (
-        select(TableUsers)
-        .filter_by(user_id=user_id)
-        .options(
-            selectinload(TableUsers.card_first),
-            selectinload(TableUsers.card_second)
-        )
-    )
+    """Получить карты пользователя за столом"""
 
-    result = await session.execute(query)
-    users = result.scalars().all()
+    user = await get_user_on_table_by_id(user_id, table_id, session, True)
 
-    for user in users:
-        return user.card_first, user.card_second
-
-
+    return user[0].card_first, user[0].card_second
