@@ -54,6 +54,10 @@ async def disconnection_user_from_table(
         await session.delete(result)
         await session.commit()
 
+    except SQLAlchemyError:
+        await session.rollback()
+        raise HTTPException(status_code=500, detail=str(SQLAlchemyError))
+
     except NoResultFound:
         raise HTTPException(status_code=404, detail="User not found")
 
@@ -73,6 +77,8 @@ async def get_user_on_table_by_id(
 
         result = await session.execute(query)
 
-        return result.scalars().first()
+    except SQLAlchemyError:
+        raise HTTPException(status_code=500, detail=str(SQLAlchemyError))
+
     except NoResultFound:
         raise HTTPException(status_code=404, detail="User not found")
